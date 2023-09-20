@@ -38,5 +38,44 @@ namespace DebilITELEC1C.Controllers
             return NotFound();
         }
 
+        [HttpGet]
+        public IActionResult AddInstructor()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult AddInstructor(Instructor AddInstructor)
+        {
+            InstructorList.Add(AddInstructor);
+            return View("Index", InstructorList);
+        }
+
+        [HttpGet]
+        public IActionResult UpdateInstructor(int id)
+        {
+            Instructor? instructor = InstructorList.FirstOrDefault(st => st.Id == id);
+
+            if (instructor != null)
+                return View(instructor);
+
+            return NotFound();
+        }
+
+        [HttpPost]
+        public IActionResult UpdateInstructor(Instructor instructorChanges)
+        {
+            Instructor? instructor = InstructorList.FirstOrDefault(st => st.Id == instructorChanges.Id);
+
+            if (instructor != null)
+            {
+                instructor.FirstName = instructorChanges.FirstName;
+                instructor.LastName = instructorChanges.LastName;
+                instructor.IsTenured = instructorChanges.IsTenured;
+                instructor.Rank = instructorChanges.Rank;              
+                instructor.HiringDate = instructorChanges.HiringDate;
+
+            }
+            return View("Index", InstructorList);
+        }
     }
 }
