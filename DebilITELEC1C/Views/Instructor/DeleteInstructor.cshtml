@@ -5,39 +5,39 @@
 }
 @model Instructor;
 
-<h1> Add Instructor </h1>
+<h1>Are you sure you want to delete?</h1>
 
-<form action="AddInstructor" method="post">
+<form action="DeleteInstructor" method="post">
     <div class="form-group">
-        <label asp-for="Id">ID</label>
-        <input asp-for="Id" class="form-control" />
+        <label asp-for="Id" hidden>ID</label>
+        <input asp-for="Id" class="form-control" hidden />
     </div>
 
     <div class="form-group">
         <label asp-for="FirstName">First Name</label>
-        <input asp-for="FirstName" class="form-control" />
+        <input asp-for="FirstName" class="form-control" readonly />
     </div>
 
     <div class="form-group">
         <label asp-for="LastName">Last Name</label>
-        <input asp-for="LastName" class="form-control" />
+        <input asp-for="LastName" class="form-control" readonly />
     </div>
 
     <div class="form-group">
         <label asp-for="IsTenured">Status</label>
-        <select asp-for="IsTenured" asp-items="Html.GetEnumSelectList(typeof(IsTenured))" class="form-control"></select>
+        <select asp-for="IsTenured" asp-items="Html.GetEnumSelectList(typeof(IsTenured))" class="form-control" readonly></select>
     </div>
 
     <div class="form-group">
         <label asp-for="Rank">Rank</label>
-        <select asp-for="Rank" asp-items="Html.GetEnumSelectList(typeof(Rank))" class="form-control"></select>
-    </div>
+        <select asp-for="Rank" asp-items="Html.GetEnumSelectList(typeof(Rank))" class="form-control" readonly></select>
+    </div> 
 
     <div class="form-group">
         <label asp-for="HiringDate">Hiring Date</label>
-        <input asp-for="HiringDate" class="form-control" />
+        <input asp-for="HiringDate" class="form-control" readonly />
     </div>
     <hr>
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="submit" class="btn btn-danger">Delete</button>
     <button type="reset" onClick="history.back()" class="btn btn-secondary">Cancel</button>
 </form>

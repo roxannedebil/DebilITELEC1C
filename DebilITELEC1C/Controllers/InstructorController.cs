@@ -1,4 +1,5 @@
 ﻿using DebilITELEC1C.Models;
+using DebilITELEC1C.Services;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -7,30 +8,21 @@ namespace DebilITELEC1C.Controllers
 {
     public class InstructorController : Controller
     {
-        List<Instructor> InstructorList = new List<Instructor>
-            {
-                new Instructor()
-                {
-                    Id= 1,FirstName = "Gabriel",LastName = "Montano", IsTenured = IsTenured.Permanent, Rank = Rank.Professor, HiringDate = DateTime.Parse("2022-08-26")
-                },
-                new Instructor()
-                {
-                    Id= 2,FirstName = "Beatriz",LastName = "Lacsamana", IsTenured = IsTenured.Probationary, Rank = Rank.AssistantProfessor, HiringDate = DateTime.Parse("2022-08-07")
-                },
-                new Instructor()
-                {
-                    Id= 3,FirstName = "Leonid",LastName = "Lintag", IsTenured = IsTenured.Permanent, Rank = Rank.AssociateProfessor, HiringDate = DateTime.Parse("2020-01-25")
-                }
-            };
+        private readonly IMyFakeDataService _dummyData;
+
+        public InstructorController(IMyFakeDataService dummyData)
+        {
+            _dummyData = dummyData;
+        }
         public IActionResult Index()
         {
 
-            return View(InstructorList);
+            return View(_dummyData.InstructorList);
         }
 
         public IActionResult ShowDetail(int id)
         {
-            Instructor? instructor = InstructorList.FirstOrDefault(st => st.Id == id);
+            Instructor? instructor = _dummyData.InstructorList.FirstOrDefault(st => st.Id == id);
 
             if (instructor != null)
                 return View(instructor);
@@ -46,14 +38,14 @@ namespace DebilITELEC1C.Controllers
         [HttpPost]
         public IActionResult AddInstructor(Instructor AddInstructor)
         {
-            InstructorList.Add(AddInstructor);
-            return View("Index", InstructorList);
+            _dummyData.InstructorList.Add(AddInstructor);
+            return RedirectToAction("Index" );
         }
 
         [HttpGet]
         public IActionResult UpdateInstructor(int id)
         {
-            Instructor? instructor = InstructorList.FirstOrDefault(st => st.Id == id);
+            Instructor? instructor = _dummyData.InstructorList.FirstOrDefault(st => st.Id == id);
 
             if (instructor != null)
                 return View(instructor);
@@ -64,7 +56,7 @@ namespace DebilITELEC1C.Controllers
         [HttpPost]
         public IActionResult UpdateInstructor(Instructor instructorChanges)
         {
-            Instructor? instructor = InstructorList.FirstOrDefault(st => st.Id == instructorChanges.Id);
+            Instructor? instructor = _dummyData.InstructorList.FirstOrDefault(st => st.Id == instructorChanges.Id);
 
             if (instructor != null)
             {
@@ -75,7 +67,30 @@ namespace DebilITELEC1C.Controllers
                 instructor.HiringDate = instructorChanges.HiringDate;
 
             }
-            return View("Index", InstructorList);
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public IActionResult DeleteInstructor(int id)
+        {
+            Instructor? instructor = _dummyData.InstructorList.FirstOrDefault(st => st.Id == id);
+
+            if (instructor != null)
+                return View(instructor);
+
+            return NotFound();
+        }
+
+
+        [HttpPost]
+        public IActionResult DeleteInstructor(Student newInstructor)
+        {
+            Instructor? instructor = _dummyData.InstructorList.FirstOrDefault(st => st.Id == newInstructor.Id);
+
+            if (instructor != null)
+                _dummyData.InstructorList.Remove(instructor);
+
+            return RedirectToAction("Index");
         }
     }
 }
